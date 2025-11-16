@@ -5,7 +5,7 @@
         }
 
         .favicon-lines {
-            fill: #05BDBA;
+            fill: #05bdba;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -14,7 +14,7 @@
             }
 
             .favicon-lines {
-                fill: #05BDBA;
+                fill: #05bdba;
             }
         }
     </style>

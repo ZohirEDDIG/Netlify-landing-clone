@@ -1,1 +1,52 @@
+@import url(https://fonts.googleapis.com/css?family=Instrument+Sans:regular,500,600,700,italic,500italic,600italic,700italic);
+
 @import 'tailwindcss';
+
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+    --color-dark-green-primary: #131921;
+    --color-dark-green-secondary: #1e242c;
+
+    --color-light-green-primary: #00e7e2;
+    --color-light-green-secondary: #8efbF7;
+
+    --breakpoint-emd: 890px;
+    --breakpoint-elg: 1085px;
+}
+
+@layer components {
+    .ctn {
+        @apply max-w-[1800px] p-4 lg:px-8 xl:px-16 2xl:px-32 mx-auto;
+    }
+}
+
+body { 
+    background-color: var(--color-dark-green-primary);
+    font-family: 'Instrument Sans', system-ui, 'Helvetica', sans-serif;
+}
+
+a {
+    user-select: none;
+}
+
+button {
+    cursor: pointer;
+    user-select: none;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: var(--color-dark-green-primary);
+    border-radius: 4px;
+}       
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-dark-green-secondary);
+    border-radius: 4px;
+}

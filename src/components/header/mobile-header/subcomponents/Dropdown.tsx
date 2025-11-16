@@ -1,0 +1,66 @@
+import Link from 'next/link';
+
+import { Platform, Solutions, Developers, Resources } from './';
+import { AnimatePresence, motion } from 'framer-motion';
+
+const Dropdown = ({ isOpen }: { isOpen: boolean }) => {
+    return (
+        <AnimatePresence>
+            {
+                isOpen && (
+
+                    <motion.div 
+                        className='ctn h-[calc(100vh-80.98px)] flex flex-col gap-y-4 overflow-auto'
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        {/* Platform */}
+                        <Platform />
+
+                        {/* Solutions */}
+                        <Solutions />
+
+                        {/* Developers */}
+                        <Developers />
+
+                        {/* Resources */}
+                        <Resources />
+
+                        {/* Pricing */}
+                        <Link
+                            href='/pricing'
+                            className='bg-dark-green-secondary w-full font-medium p-2 rounded-md
+                            transition-opacity duration-300 ease-in-out hover:opacity-80'
+                        >
+                            Pricing
+                        </Link>
+
+                        {/* Contact */}
+                        <Link
+                            href='/contact'
+                            className='bg-dark-green-secondary w-full font-medium p-2 rounded-md
+                            transition-opacity duration-300 ease-in-out hover:opacity-80'
+                        >
+                            Contact
+                        </Link>
+
+                        {/* Sign Up */}
+                        <Link
+                            href='/signup'
+                            className='bg-light-green-primary text-black font-medium px-4 py-2 rounded-full flex justify-center
+                            transition-colors duration-300 ease-out hover:bg-light-green-secondary'
+                        >
+                            Sign up
+                        </Link>
+
+                </motion.div>
+
+            )}
+
+        </AnimatePresence>
+    );
+};
+
+export default Dropdown;
