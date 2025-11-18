@@ -12,7 +12,7 @@ import {
 
 const Header = () => {
     return (
-        <header className='bg-dark-green-primary text-white'>
+        <header className='bg-dark-green-primary text-white shadow-md'>
 
             <div className='ctn flex justify-between items-center'>
 

@@ -10,7 +10,7 @@ const Dropdown = ({ isOpen }: { isOpen: boolean }) => {
                 isOpen && (
 
                     <motion.div 
-                        className='ctn h-[calc(100vh-80.98px)] flex flex-col gap-y-4 overflow-auto'
+                        className='bg-dark-green-primary  h-screen-minus-header pr-2 flex flex-col gap-y-4 fixed z-10 overflow-auto'
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
