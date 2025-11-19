@@ -7,7 +7,13 @@ import { AutoScroll } from '@splidejs/splide-extension-auto-scroll';
 
 import '@splidejs/react-splide/css';
 
-type Partner = { alt: string; src: string; width: number; height: number; };
+type Partner = { 
+    src: string; 
+    alt: string; 
+    width: number; 
+    height: number; 
+};
+
 
 const partners: Partner[] = [
     { alt: 'Contentful logo', src: '/partners/contentful.svg', width: 120 , height: 60 },
@@ -19,7 +25,7 @@ const partners: Partner[] = [
     { alt: 'Navan logo', src: '/partners/navan.svg', width: 110 , height: 60 },
 ];
 
-export default function Partners() {
+const Partners = () => {
     return (
         <div className='ctn'>
             <Splide
@@ -55,4 +61,6 @@ export default function Partners() {
 
         </div>
     );
-}
+};
+
+export default Partners;
