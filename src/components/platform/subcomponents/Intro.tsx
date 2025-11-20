@@ -4,7 +4,14 @@ const Intro = () => {
             
             <h6 className='text-light-green-primary text-xl font-mono font-bold'>PLATFORM</h6>
 
-            <h1 className='text-white text-4xl sm:text-6xl font-bold max-w-[800px]'>Everything you need to ship. Nothing you don’t.</h1>
+            <h1 
+                className='text-white text-4xl md:text-5xl elg:text-6xl font-bold 
+                max-w-[600px] md:max-w-[700px] elg:max-w-[800px]'
+            >
+                
+                Everything you need to ship. Nothing you don’t.
+            
+            </h1>
 
             <p className='text-light-green-quaternary text-sm sm:text-lg max-w-[600px]'>
 

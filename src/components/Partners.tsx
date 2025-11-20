@@ -26,7 +26,7 @@ const partners: Partner[] = [
 
 const Partners = () => {
     return (
-        <div className='ctn'>
+        <div className='ctn mt-10'>
             <Splide
                 extensions={{ AutoScroll }}
                 options={{
@@ -39,9 +39,9 @@ const Partners = () => {
                     autoScroll: { speed: 0.5 },
                     perPage: 5,
                     breakpoints: {
-                        400: { perPage: 2 },
+                        550: { perPage: 2 },
                         800: { perPage: 3 },
-                        1000: { perPage: 4 },
+                        1200: { perPage: 4 },
                     },
                 }}
             >

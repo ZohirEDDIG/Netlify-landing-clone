@@ -12,9 +12,9 @@ const BuildAnything = () => {
 
             <div className='flex flex-col gap-y-8'>
 
-                <h2 className='text-white text-2xl sm:text-4xl font-bold'>Build anything</h2>
+                <h2 className='text-white text-2xl md:text-3xl elg:text-4xl font-bold'>Build anything</h2>
 
-                <p className='text-white text-sm sm:text-lg'>
+                <p className='text-white text-sm md:text-base elg:text-lg'>
                     
                     Everything your app needs in one place. Create APIs, save images, store data 
                     without juggling a ton of services.
@@ -24,7 +24,7 @@ const BuildAnything = () => {
                 <ul className='flex flex-col gap-y-2'>
 
                     <li 
-                        className='bg-dark-green-tertiary text-white text-sm sm:text-lg p-4 
+                        className='bg-dark-green-tertiary text-white text-sm md:text-base elg:text-lg p-4 
                         border border-light-green-tertiary rounded-sm'
                     
                     >
@@ -34,7 +34,7 @@ const BuildAnything = () => {
                     </li>
                     
                     <li 
-                        className='bg-dark-green-tertiary text-white text-sm sm:text-lg p-4 
+                        className='bg-dark-green-tertiary text-white text-sm md:text-base elg:text-lg p-4 
                         border border-light-green-tertiary rounded-sm'
                     >
                         
@@ -43,7 +43,7 @@ const BuildAnything = () => {
                     </li>
 
                     <li 
-                        className='bg-dark-green-tertiary text-white text-sm sm:text-lg p-4 
+                        className='bg-dark-green-tertiary text-white text-sm md:text-base elg:text-lg p-4 
                         border border-light-green-tertiary rounded-sm'
                     >
                         
@@ -55,7 +55,7 @@ const BuildAnything = () => {
 
                 <Link 
                     href='/platform/primitives'
-                    className='text-light-green-quaternary text-sm sm:text-lg 
+                    className='text-light-green-quaternary text-sm md:text-base elg:text-lg
                     underline decoration-light-green-primary flex gap-x-2 group'
                 >
                 

@@ -18,9 +18,9 @@ const ShipInstantly = () => {
 
             <div className='max-xl:order-1 flex flex-col gap-y-8'>
 
-                <h2 className='text-white text-2xl sm:text-4xl font-bold'>Ship instantly</h2>
+                <h2 className='text-white text-2xl md:text-3xl elg:text-4xl font-bold'>Ship instantly</h2>
 
-                <p className='text-white text-sm sm:text-lg'>
+                <p className='text-white text-sm md:text-base elg:text-l'>
                     
                     Get your app live. Deploy from Bolt, Cursor, GitHub, or anywhere you build. 
                     Every change gets a shareable preview link.
@@ -30,7 +30,7 @@ const ShipInstantly = () => {
                 <ul className='flex flex-col gap-y-2'>
 
                     <li 
-                        className='bg-dark-green-tertiary text-white text-sm sm:text-lg p-4 
+                        className='bg-dark-green-tertiary text-white text-sm md:text-base elg:text-l p-4 
                         border border-light-green-tertiary rounded-sm'
                     >
                         
@@ -39,7 +39,7 @@ const ShipInstantly = () => {
                     </li>
                     
                     <li 
-                        className='bg-dark-green-tertiary text-white text-sm sm:text-lg p-4 
+                        className='bg-dark-green-tertiary text-white text-sm md:text-base elg:text-l p-4 
                         border border-light-green-tertiary rounded-sm'
                     >
                         
@@ -48,7 +48,7 @@ const ShipInstantly = () => {
                     </li>
 
                     <li 
-                        className='bg-dark-green-tertiary text-white text-sm sm:text-lg p-4 
+                        className='bg-dark-green-tertiary text-white text-sm md:text-base elg:text-l p-4 
                         border border-light-green-tertiary rounded-sm'
                     >
                         
@@ -60,7 +60,7 @@ const ShipInstantly = () => {
 
                 <Link 
                     href='/platform/core/deploy-previews'
-                    className='text-light-green-quaternary text-sm sm:text-lg 
+                    className='text-light-green-quaternary text-sm md:text-base elg:text-l 
                     underline decoration-light-green-primary flex gap-x-2 group'
                 >
                 
