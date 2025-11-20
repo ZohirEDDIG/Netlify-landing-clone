@@ -13,7 +13,7 @@ const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <header className='bg-dark-green-primary text-white shadow-md'>
+        <header className='fixed w-full z-10 bg-dark-green-primary text-white shadow-md'>
 
             <div className='ctn flex justify-between items-center'>
 

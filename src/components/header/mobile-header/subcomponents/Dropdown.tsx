@@ -2,15 +2,25 @@ import Link from 'next/link';
 
 import { Platform, Solutions, Developers, Resources } from './';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect } from 'react';
 
 const Dropdown = ({ isOpen }: { isOpen: boolean }) => {
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflowY = 'hidden';
+        } else {
+            setTimeout(() => {
+                document.body.style.overflowY = 'auto';
+            }, 500);
+        }
+    }, [isOpen]);
+    
     return (
         <AnimatePresence>
             {
                 isOpen && (
-
                     <motion.div 
-                        className='bg-dark-green-primary  h-screen-minus-header pr-2 flex flex-col gap-y-4 fixed z-10 overflow-auto'
+                        className='bg-dark-green-primary h-screen-minus-header  px-2 flex flex-col gap-y-4 fixed z-10 overflow-auto'
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}

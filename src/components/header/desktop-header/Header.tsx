@@ -1,5 +1,9 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
+
+import { useState, useEffect } from 'react';
 
 import { Search } from 'lucide-react';
 
@@ -12,7 +16,7 @@ import {
 
 const Header = () => {
     return (
-        <header className='bg-dark-green-primary text-white shadow-md'>
+        <header className='fixed z-10 w-full bg-dark-green-primary text-white shadow-md'>
 
             <div className='ctn flex justify-between items-center'>
 

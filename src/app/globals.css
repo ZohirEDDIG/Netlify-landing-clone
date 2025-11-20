@@ -3,6 +3,7 @@
 
 @theme {
     --color-dark-green-primary: #131921;
+
     --color-dark-green-secondary: #1e242c;
     --color-dark-green-tertiary: #e9ebed1a;
 
@@ -40,7 +41,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: var(--color-dark-green-secondary);
+    background-color: var(--color-dark-green-tertiary);
     border-radius: 4px;
 }
 
