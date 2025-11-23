@@ -2,5 +2,6 @@ import Header from './header/Header';
 import Hero from './hero/Hero';
 import Partners from './Partners';
 import Platform from './platform/Platform';
+import Primitives from './primitives/Primitives';
 
-export { Header, Hero, Partners, Platform };
+export { Header, Hero, Partners, Platform, Primitives };

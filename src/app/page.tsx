@@ -1,4 +1,4 @@
-import { Header, Hero, Partners, Platform } from '@/components/';
+import { Header, Hero, Partners, Platform, Primitives } from '@/components/';
 
 export default function Home() {
     return (
@@ -7,6 +7,7 @@ export default function Home() {
             <Hero />
             <Partners />
             <Platform />
+            <Primitives />
         </>
     );
 }

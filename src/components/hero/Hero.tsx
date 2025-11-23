@@ -27,7 +27,7 @@ const Hero = () => {
                         {/* Get started */}
                         <Link 
                             href='/signup'
-                            className='bg-light-green-primary text-black text-xs smLtext-sm font-medium px-4 py-2.5 rounded-full
+                            className='bg-light-green-primary text-black text-xs sm:text-sm font-medium px-4 py-2.5 rounded-full
                             select-none transition-colors duration-300 ease-out hover:bg-light-green-secondary'
                         >
 
