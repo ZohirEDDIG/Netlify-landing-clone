@@ -48,7 +48,7 @@ const Primitive = ({ activeTab }: { activeTab: PrimitiveName} ) => {
 
             </div>
 
-            <div className='font-mono bg-black'>
+            <div className='bg-black font-mono'>
 
                 <h3 className='text-gray-400 text-lg elg:text-xl font-bold uppercase px-4 py-2  border-b border-light-green-primary'>{primitiveData.example}</h3>
 

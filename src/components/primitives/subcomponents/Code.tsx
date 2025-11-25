@@ -1,9 +1,216 @@
+'use client';
+
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+
+import { Check, Copy } from 'lucide-react';
+
 import { type PrimitiveName  } from '../data';
 
-const AIGatewayCode = () => {
+const aiGatewayCode = `
+import OpenAI from "openai";
+
+export default async (req: Request) => {
+    if (req.method !== "POST") {
+        return new Response("Method not allowed", { status: 405 });
+    }
+
+    try {
+        const { description } = await req.json();
+        if (!description) {
+            return new Response("Missing description", { status: 400 });
+        }
+
+        const client = new OpenAI();
+        const res = await client.responses.create({
+            model: "gpt-5-mini",
+            input: [
+                { role: "user", content: \`Write concise alt text for: \${description}\` },
+            ],
+        });
+
+        return Response.json({ altText: res.output_text });
+    } catch {
+        return new Response("Server error", { status: 500 });
+    }
+};
+
+export const config = {
+    path: "/api/alt-text",
+};
+`;
+
+const serverlessFunctionsCode = `
+import type { Context, Config } from "@netlify/functions";
+
+export default async (req: Request, context: Context) => {
+    if (req.method !== "POST") return new Response("Method not allowed", { status: 405 });
+
+    try {
+        const { name, email, message } = await req.json();
+        if (!name || !email || !message) return new Response("Missing fields", { status: 400 });
+        
+        // Mock email API
+        await fetch("https://api.emailservice.com/send", {
+            method: "POST",
+            headers: { "Authorization": \`Bearer \${Netlify.env.get("EMAIL_API_KEY")}\`, "Content-Type": "application/json" },
+            body: JSON.stringify({ to: "test@example.com", subject: \`Hello world\`, text: \`Hello \${name}\` })
+        });
+        
+        return Response.json({ success: true });
+    } catch {
+        return new Response("Server error", { status: 500 });
+    }
+};
+`; 
+
+const dataAndStorageCode = `
+import { getStore } from "@netlify/blobs";
+import type { Context } from "@netlify/functions";
+import { v4 as uuid } from "uuid";
+
+export default async (req: Request, context: Context) => {
+    // Accessing the request as \`multipart/form-data\`.
+    const form = await req.formData();
+    const file = form.get("file") as File;
+
+    // Generating a unique key for the entry.
+    const key = uuid();
+
+    const uploads = getStore("file-uploads");
+    await uploads.set(key, file, {
+        metadata: { country: context.geo.country.name }
+    });
+
+    return new Response("Submission saved");
+};
+`;
+
+const imageCdnCode = `
+<!-- Resize an image to 200x200 pixels -->
+<img src="/.netlify/images?url=/photo.jpg&w=200&h=200"
+    alt="Resized and cached image">
+`;
+
+const automaticFormsCode = `
+    <form name="contact" method="POST" data-netlify="true">
+        <p>
+            <label>Your name: <input type="text" name="name" /></label>
+        </p>
+        <p>
+            <label>Your email: <input type="email" name="email" /></label>
+        </p>
+        <p>
+            <label>Your job title: <input type="text" name="title" /></label>
+        </p>
+        <p>
+            <label>Message: <textarea name="message"></textarea></label>
+        </p>
+        <p>
+            <button type="submit">Send</button>
+        </p>
+    </form>
+`;
+
+type CopyButtonProps = {
+    code: string;
+    copyButtonVisible: boolean;
+    setCopyButtonVisible: Dispatch<SetStateAction<boolean>>; 
+    tooltipVisible: boolean;
+    setTooltipVisible: Dispatch<SetStateAction<boolean>>;
+    isCopied: boolean;
+    setIsCopied: Dispatch<SetStateAction<boolean>>;
+};
+
+const CopyButton = ({ code, copyButtonVisible, setCopyButtonVisible, tooltipVisible, setTooltipVisible, isCopied, setIsCopied }: CopyButtonProps ) => {
+    const handleCopy = () => {
+        navigator.clipboard.writeText(code);
+        setIsCopied(true);
+    };
+
+    useEffect(() => {
+        let timeoutId = null;
+
+        if (isCopied) {
+            timeoutId = setTimeout(() => {
+                setIsCopied(false);
+                setCopyButtonVisible(false);
+                setTooltipVisible(false);
+            }, 3000);
+        }
+        
+        if (timeoutId) {
+            return () => clearTimeout(timeoutId);
+        } 
+    }, [isCopied, setIsCopied, setCopyButtonVisible, setTooltipVisible]);
+
+    useEffect(() => {
+        setIsCopied(false);
+    }, [])
+
+    const handleMouseLeave = () => {
+        if (isCopied) return;
+        setTooltipVisible(false);
+    };
+
     return (
-        <code className='px-4 py-2 block overflow-x-auto'>
+        <div className={`${copyButtonVisible ? 'flex' : 'hidden'} items-center gap-x-2 absolute right-4`}>
+
+            <div className={`${copyButtonVisible && tooltipVisible? 'block' : 'hidden'} bg-gray-900 text-gray-400 text-xs px-1 relative`}>
+
+                {isCopied ? 'Copied!' : 'Copy'}
+
+                <span className='border-5 border-transparent border-l-gray-900 absolute top-1/2 -right-2 -translate-y-1/2 z-10' />
+
+            </div>
+
+            <button 
+                className='bg-gray-600/40 text-gray-500 p-1 border-[1.5px] border-gray-600/40 rounded-md transition-colors duration-300 ease-in-out 
+                hover:bg-transparent hover:text-white'
+                type='button' 
+                onClick={handleCopy}
+                onMouseEnter={() => setTooltipVisible(true)}
+                onMouseLeave={handleMouseLeave}
+            >
+                { isCopied ? <Check size={15} /> : <Copy size={15}  /> }
             
+            </button>
+
+        </div>
+    );
+};
+
+type Props = {
+    copyButtonVisible: boolean;
+    setCopyButtonVisible: Dispatch<SetStateAction<boolean>>;
+    tooltipVisible: boolean;
+    setTooltipVisible: Dispatch<SetStateAction<boolean>>;
+    isCopied: boolean;
+    setIsCopied: Dispatch<SetStateAction<boolean>>;
+};
+
+const AIGatewayCode = ({ copyButtonVisible, setCopyButtonVisible, tooltipVisible, setTooltipVisible, isCopied, setIsCopied }: Props) => {
+    const handleOnMouseLeave = () => {
+        if (isCopied) return;
+        setCopyButtonVisible(false);
+    };
+
+    return (
+        <code 
+            className='h-[655px] px-4 py-2 block overflow-x-auto relative'
+            onMouseEnter={() => setCopyButtonVisible(true)}
+            onMouseLeave={handleOnMouseLeave}
+        >
+
+            <CopyButton 
+                code={aiGatewayCode} 
+                copyButtonVisible={copyButtonVisible}
+                setCopyButtonVisible={setCopyButtonVisible}
+                tooltipVisible={tooltipVisible}
+                setTooltipVisible={setTooltipVisible}
+                isCopied={isCopied}
+                setIsCopied={setIsCopied} 
+            />
+
             <div className='whitespace-nowrap'>
                 <span className="text-[#89DDFF]">import</span>
                 <span className="text-[#E4F0FB]">&nbsp;OpenAI</span>
@@ -241,9 +448,28 @@ const AIGatewayCode = () => {
     );
 };
 
-const ServerlessFunctions = () => {
+const ServerlessFunctions = ({ copyButtonVisible, setCopyButtonVisible, tooltipVisible, setTooltipVisible, isCopied, setIsCopied }: Props) => {
+    const handleOnMouseLeave = () => {
+        if (isCopied) return;
+        setCopyButtonVisible(false);
+    };
+
     return (
-        <code className='px-4 py-2 block overflow-x-auto'>
+        <code 
+            className='h-[655px] px-4 py-2 block overflow-x-auto relative'
+            onMouseEnter={() => setCopyButtonVisible(true)}
+            onMouseLeave={handleOnMouseLeave}
+        >
+
+            <CopyButton 
+                code={serverlessFunctionsCode} 
+                copyButtonVisible={copyButtonVisible}
+                setCopyButtonVisible={setCopyButtonVisible}
+                tooltipVisible={tooltipVisible}
+                setTooltipVisible={setTooltipVisible}
+                isCopied={isCopied}
+                setIsCopied={setIsCopied} 
+            />
             
             <div className='whitespace-nowrap'>
                 <span className="text-[#89DDFF]">import</span>
@@ -508,9 +734,28 @@ const ServerlessFunctions = () => {
     );
 };
 
-const DataAndStorage = () => {
+const DataAndStorage = ({ copyButtonVisible, setCopyButtonVisible, tooltipVisible, setTooltipVisible, isCopied, setIsCopied }: Props) => {
+    const handleOnMouseLeave = () => {
+        if (isCopied) return;
+        setCopyButtonVisible(false);
+    };
+    
     return (
-        <code className='px-4 py-2 block overflow-x-auto'>
+        <code 
+            className='h-[655px] px-4 py-2 block overflow-x-auto relative'
+            onMouseEnter={() => setCopyButtonVisible(true)}
+            onMouseLeave={handleOnMouseLeave}
+        >
+
+            <CopyButton 
+                code={dataAndStorageCode} 
+                copyButtonVisible={copyButtonVisible}
+                setCopyButtonVisible={setCopyButtonVisible}
+                setTooltipVisible={setTooltipVisible}
+                tooltipVisible={tooltipVisible}
+                isCopied={isCopied}
+                setIsCopied={setIsCopied} 
+            />
             
             <div className='whitespace-nowrap'>
                 <span className="text-[#89DDFF]">import</span>
@@ -691,9 +936,28 @@ const DataAndStorage = () => {
     );
 };
 
-const ImageCdn = () => {
+const ImageCdn = ({ copyButtonVisible, setCopyButtonVisible, tooltipVisible, setTooltipVisible, isCopied, setIsCopied }: Props) => {
+    const handleOnMouseLeave = () => {
+        if (isCopied) return;
+        setCopyButtonVisible(false);
+    };
+    
     return (
-        <code className='px-4 py-2 block overflow-x-auto'>
+        <code 
+            className='h-[655px] px-4 py-2 block overflow-x-auto relative'
+            onMouseEnter={() => setCopyButtonVisible(true)}
+            onMouseLeave={handleOnMouseLeave}
+        >
+
+            <CopyButton 
+                code={imageCdnCode} 
+                copyButtonVisible={copyButtonVisible}
+                setCopyButtonVisible={setCopyButtonVisible}
+                setTooltipVisible={setTooltipVisible}
+                tooltipVisible={tooltipVisible}
+                isCopied={isCopied}
+                setIsCopied={setIsCopied} 
+            />
 
             <div className='whitespace-nowrap'>
                 <span className='text-[#A6ACCD] italic'>&lt;-- Resize an image to 200x200 pixels --&gt;</span>
@@ -722,9 +986,28 @@ const ImageCdn = () => {
     );
 };
 
-const AutomaticForms = () => {
+const AutomaticForms = ({ copyButtonVisible, setCopyButtonVisible, tooltipVisible, setTooltipVisible, isCopied, setIsCopied }: Props) => {
+    const handleOnMouseLeave = () => {
+        if (isCopied) return;
+        setCopyButtonVisible(false);
+    };
+    
     return (
-        <code className='px-4 py-2 block overflow-x-auto'>
+        <code 
+            className='h-[655px] px-4 py-2 block overflow-x-auto relative'
+            onMouseEnter={() => setCopyButtonVisible(true)}
+            onMouseLeave={handleOnMouseLeave}
+        >
+
+            <CopyButton 
+                code={automaticFormsCode} 
+                copyButtonVisible={copyButtonVisible}
+                setCopyButtonVisible={setCopyButtonVisible}
+                setTooltipVisible={setTooltipVisible}
+                tooltipVisible={tooltipVisible}
+                isCopied={isCopied}
+                setIsCopied={setIsCopied} 
+            />
 
             <div className='whitespace-nowrap'>
                 <span className='text-[#89DDFF]'>&lt;</span>
@@ -932,24 +1215,37 @@ const AutomaticForms = () => {
 };
 
 const Code = ({ primitiveName }: { primitiveName: PrimitiveName }) => {
+    const [copyButtonVisible, setCopyButtonVisible] = useState<boolean>(false);
+    const [tooltipVisible, setTooltipVisible] = useState<boolean>(false);
+
+    const [isCopied, setIsCopied] = useState(false);
+
+    const props = {copyButtonVisible, setCopyButtonVisible, tooltipVisible, setTooltipVisible, isCopied, setIsCopied};
+
+    // useEffect(() => {
+    //     setCopyButtonVisible(false);
+    //     setTooltipVisible(false);
+    //     setIsCopied(false);
+    // }, [primitiveName]);
+
     return (
         primitiveName === 'AI Gateway' 
         
-        ?   <AIGatewayCode />
+        ?   <AIGatewayCode {...props}  />
 
         :   primitiveName === 'Serverless functions'
 
-        ?   <ServerlessFunctions />
+        ?   <ServerlessFunctions  {...props} />
 
         :   primitiveName === 'Data & storage'
 
-        ?   <DataAndStorage />
+        ?   <DataAndStorage  {...props} />
 
         :   primitiveName === 'Image CDN'
 
-        ?   <ImageCdn />
+        ?   <ImageCdn {...props} />
 
-        :   <AutomaticForms />
+        :   <AutomaticForms {...props} />
     );
 };
 
