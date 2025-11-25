@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client';
 
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
@@ -111,17 +112,12 @@ const automaticFormsCode = `
     </form>
 `;
 
-type CopyButtonProps = {
-    code: string;
-    copyButtonVisible: boolean;
-    setCopyButtonVisible: Dispatch<SetStateAction<boolean>>; 
-    tooltipVisible: boolean;
-    setTooltipVisible: Dispatch<SetStateAction<boolean>>;
-    isCopied: boolean;
-    setIsCopied: Dispatch<SetStateAction<boolean>>;
-};
 
-const CopyButton = ({ code, copyButtonVisible, setCopyButtonVisible, tooltipVisible, setTooltipVisible, isCopied, setIsCopied }: CopyButtonProps ) => {
+const CopyButton = ({ code, isInCode }: { code: string; isInCode: boolean }) => {
+    const [copyButtonVisible, setCopyButtonVisible] = useState<boolean>();
+    const [tooltipVisible, setTooltipVisible] = useState<boolean>();
+    const [isCopied, setIsCopied] = useState<boolean>(false);
+
     const handleCopy = () => {
         navigator.clipboard.writeText(code);
         setIsCopied(true);
@@ -144,8 +140,14 @@ const CopyButton = ({ code, copyButtonVisible, setCopyButtonVisible, tooltipVisi
     }, [isCopied, setIsCopied, setCopyButtonVisible, setTooltipVisible]);
 
     useEffect(() => {
-        setIsCopied(false);
-    }, [])
+        if (isInCode) {
+            setCopyButtonVisible(true);
+        } else {
+            if (!isCopied) {
+                setCopyButtonVisible(false);
+            }
+        }
+    }, [isInCode, isCopied, setCopyButtonVisible]);
 
     const handleMouseLeave = () => {
         if (isCopied) return;
@@ -180,35 +182,22 @@ const CopyButton = ({ code, copyButtonVisible, setCopyButtonVisible, tooltipVisi
 };
 
 type Props = {
-    copyButtonVisible: boolean;
-    setCopyButtonVisible: Dispatch<SetStateAction<boolean>>;
-    tooltipVisible: boolean;
-    setTooltipVisible: Dispatch<SetStateAction<boolean>>;
-    isCopied: boolean;
-    setIsCopied: Dispatch<SetStateAction<boolean>>;
+    isInCode: boolean;
+    setIsInCode: Dispatch<SetStateAction<boolean>>;
 };
 
-const AIGatewayCode = ({ copyButtonVisible, setCopyButtonVisible, tooltipVisible, setTooltipVisible, isCopied, setIsCopied }: Props) => {
-    const handleOnMouseLeave = () => {
-        if (isCopied) return;
-        setCopyButtonVisible(false);
-    };
+const AIGatewayCode = ({ isInCode, setIsInCode }: Props) => {
 
     return (
         <code 
             className='h-[655px] px-4 py-2 block overflow-x-auto relative'
-            onMouseEnter={() => setCopyButtonVisible(true)}
-            onMouseLeave={handleOnMouseLeave}
+            onMouseEnter={() => setIsInCode(true)}
+            onMouseLeave={() => setIsInCode(false)}
         >
 
             <CopyButton 
-                code={aiGatewayCode} 
-                copyButtonVisible={copyButtonVisible}
-                setCopyButtonVisible={setCopyButtonVisible}
-                tooltipVisible={tooltipVisible}
-                setTooltipVisible={setTooltipVisible}
-                isCopied={isCopied}
-                setIsCopied={setIsCopied} 
+                code={aiGatewayCode}
+                isInCode={isInCode} 
             />
 
             <div className='whitespace-nowrap'>
@@ -448,27 +437,17 @@ const AIGatewayCode = ({ copyButtonVisible, setCopyButtonVisible, tooltipVisible
     );
 };
 
-const ServerlessFunctions = ({ copyButtonVisible, setCopyButtonVisible, tooltipVisible, setTooltipVisible, isCopied, setIsCopied }: Props) => {
-    const handleOnMouseLeave = () => {
-        if (isCopied) return;
-        setCopyButtonVisible(false);
-    };
-
+const ServerlessFunctions = ({ isInCode, setIsInCode }: Props) => {
     return (
         <code 
             className='h-[655px] px-4 py-2 block overflow-x-auto relative'
-            onMouseEnter={() => setCopyButtonVisible(true)}
-            onMouseLeave={handleOnMouseLeave}
+            onMouseEnter={() => setIsInCode(true)}
+            onMouseLeave={() => setIsInCode(false)}
         >
 
             <CopyButton 
                 code={serverlessFunctionsCode} 
-                copyButtonVisible={copyButtonVisible}
-                setCopyButtonVisible={setCopyButtonVisible}
-                tooltipVisible={tooltipVisible}
-                setTooltipVisible={setTooltipVisible}
-                isCopied={isCopied}
-                setIsCopied={setIsCopied} 
+                isInCode={isInCode}
             />
             
             <div className='whitespace-nowrap'>
@@ -734,27 +713,17 @@ const ServerlessFunctions = ({ copyButtonVisible, setCopyButtonVisible, tooltipV
     );
 };
 
-const DataAndStorage = ({ copyButtonVisible, setCopyButtonVisible, tooltipVisible, setTooltipVisible, isCopied, setIsCopied }: Props) => {
-    const handleOnMouseLeave = () => {
-        if (isCopied) return;
-        setCopyButtonVisible(false);
-    };
-    
+const DataAndStorage = ({ isInCode, setIsInCode }: Props) => {
     return (
         <code 
             className='h-[655px] px-4 py-2 block overflow-x-auto relative'
-            onMouseEnter={() => setCopyButtonVisible(true)}
-            onMouseLeave={handleOnMouseLeave}
+            onMouseEnter={() => setIsInCode(true)}
+            onMouseLeave={() => setIsInCode(false)}
         >
 
             <CopyButton 
-                code={dataAndStorageCode} 
-                copyButtonVisible={copyButtonVisible}
-                setCopyButtonVisible={setCopyButtonVisible}
-                setTooltipVisible={setTooltipVisible}
-                tooltipVisible={tooltipVisible}
-                isCopied={isCopied}
-                setIsCopied={setIsCopied} 
+                code={dataAndStorageCode}
+                isInCode={isInCode} 
             />
             
             <div className='whitespace-nowrap'>
@@ -936,27 +905,17 @@ const DataAndStorage = ({ copyButtonVisible, setCopyButtonVisible, tooltipVisibl
     );
 };
 
-const ImageCdn = ({ copyButtonVisible, setCopyButtonVisible, tooltipVisible, setTooltipVisible, isCopied, setIsCopied }: Props) => {
-    const handleOnMouseLeave = () => {
-        if (isCopied) return;
-        setCopyButtonVisible(false);
-    };
-    
+const ImageCdn = ({ isInCode, setIsInCode }: Props) => {
     return (
         <code 
             className='h-[655px] px-4 py-2 block overflow-x-auto relative'
-            onMouseEnter={() => setCopyButtonVisible(true)}
-            onMouseLeave={handleOnMouseLeave}
+            onMouseEnter={() => setIsInCode(true)}
+            onMouseLeave={() => setIsInCode(false)}
         >
 
             <CopyButton 
-                code={imageCdnCode} 
-                copyButtonVisible={copyButtonVisible}
-                setCopyButtonVisible={setCopyButtonVisible}
-                setTooltipVisible={setTooltipVisible}
-                tooltipVisible={tooltipVisible}
-                isCopied={isCopied}
-                setIsCopied={setIsCopied} 
+                code={imageCdnCode}
+                isInCode={isInCode} 
             />
 
             <div className='whitespace-nowrap'>
@@ -986,27 +945,17 @@ const ImageCdn = ({ copyButtonVisible, setCopyButtonVisible, tooltipVisible, set
     );
 };
 
-const AutomaticForms = ({ copyButtonVisible, setCopyButtonVisible, tooltipVisible, setTooltipVisible, isCopied, setIsCopied }: Props) => {
-    const handleOnMouseLeave = () => {
-        if (isCopied) return;
-        setCopyButtonVisible(false);
-    };
-    
+const AutomaticForms = ({ isInCode, setIsInCode }: Props) => {
     return (
         <code 
             className='h-[655px] px-4 py-2 block overflow-x-auto relative'
-            onMouseEnter={() => setCopyButtonVisible(true)}
-            onMouseLeave={handleOnMouseLeave}
+            onMouseEnter={() => setIsInCode(true)}
+            onMouseLeave={() => setIsInCode(false)}
         >
 
             <CopyButton 
                 code={automaticFormsCode} 
-                copyButtonVisible={copyButtonVisible}
-                setCopyButtonVisible={setCopyButtonVisible}
-                setTooltipVisible={setTooltipVisible}
-                tooltipVisible={tooltipVisible}
-                isCopied={isCopied}
-                setIsCopied={setIsCopied} 
+                isInCode={isInCode}
             />
 
             <div className='whitespace-nowrap'>
@@ -1215,37 +1164,26 @@ const AutomaticForms = ({ copyButtonVisible, setCopyButtonVisible, tooltipVisibl
 };
 
 const Code = ({ primitiveName }: { primitiveName: PrimitiveName }) => {
-    const [copyButtonVisible, setCopyButtonVisible] = useState<boolean>(false);
-    const [tooltipVisible, setTooltipVisible] = useState<boolean>(false);
-
-    const [isCopied, setIsCopied] = useState(false);
-
-    const props = {copyButtonVisible, setCopyButtonVisible, tooltipVisible, setTooltipVisible, isCopied, setIsCopied};
-
-    // useEffect(() => {
-    //     setCopyButtonVisible(false);
-    //     setTooltipVisible(false);
-    //     setIsCopied(false);
-    // }, [primitiveName]);
+    const [isInCode, setIsInCode] = useState<boolean>(false);
 
     return (
         primitiveName === 'AI Gateway' 
         
-        ?   <AIGatewayCode {...props}  />
+        ?   <AIGatewayCode isInCode={isInCode} setIsInCode={setIsInCode} />
 
         :   primitiveName === 'Serverless functions'
 
-        ?   <ServerlessFunctions  {...props} />
+        ?   <ServerlessFunctions  isInCode={isInCode} setIsInCode={setIsInCode} />
 
         :   primitiveName === 'Data & storage'
 
-        ?   <DataAndStorage  {...props} />
+        ?   <DataAndStorage isInCode={isInCode} setIsInCode={setIsInCode} />
 
         :   primitiveName === 'Image CDN'
 
-        ?   <ImageCdn {...props} />
+        ?   <ImageCdn isInCode={isInCode} setIsInCode={setIsInCode} />
 
-        :   <AutomaticForms {...props} />
+        :   <AutomaticForms isInCode={isInCode} setIsInCode={setIsInCode} />
     );
 };
 
