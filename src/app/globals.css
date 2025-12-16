@@ -49,6 +49,10 @@ img {
     user-select: none;
 }
 
+input:focus {
+    outline: none;
+}
+
 .cloud-one {
     animation: cloud-animation 5s ease-in-out 0s infinite alternate;
 }
